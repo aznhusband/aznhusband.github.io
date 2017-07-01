@@ -1,0 +1,61 @@
+1.2.7 - 2017-06-27
+ - Moved to python "requests" for web operations.
+ - User-Agent now a setting.
+ - H265 resolver added.
+
+1.2.6.3 - 2017-06-25
+ - Much improved error handling and logging.
+
+1.2.6.2 - 2017-06-24
+ - Remove google analytics
+
+1.2.6 - 2017-04-09
+ - Fix: Not able to resolve URLs
+
+1.2.5 - 2017-02-06
+ - Fix: Failed to resolve most of the videos
+
+1.2.4 - 2016-10-18
+ - Fix: Google videos did not play
+
+1.2.3 - 2016-10-17
+ - Adapt changes to site
+ - Minor updates
+
+1.2.2 - 2016-09-08
+ - Crowdsourcing stream names
+
+1.2.1 - 2016-07-02
+ - Minor updates
+
+1.2.0 - 2016-07-02
+ - Add new categories with Chinese subtitles and Cantonese dubbing
+ - Minor improvements
+
+1.1.4 - 2016-07-01
+ - Revert previous fix from 1.1.3 (no longer needed)
+
+1.1.3 - 2016-06-30
+ - Fix: could only show page 1 in HK Drama
+
+1.1.2 - 2016-06-29
+ - Show full list of episodes available instead of just the latest
+
+1.1.1 - 2016-05-27
+ - Fix incorrect string: "Removed to saved list"
+ - Improvements
+    - Separate caching and storing of user settings
+    - Easier directory navigation
+
+1.1.0 - 2016-05-25
+ - New functionalities: Saved List, Search
+
+1.0.2 - 2016-05-24
+ - Improve data analytics, including logging of cache load time
+
+1.0.1 - 2016-05-22
+ - Improve data analytics
+ - Suppress debug logs
+
+1.0.0 - 2016-05-21
+ - Initial version

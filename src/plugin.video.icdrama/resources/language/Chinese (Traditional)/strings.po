@@ -1,0 +1,185 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# Index
+###################################
+
+msgctxt "#33000"
+msgid "Recent Updates"
+msgstr "最近更新"
+
+msgctxt "#33001"
+msgid "HK Drama"
+msgstr "香港電視劇"
+
+msgctxt "#33002"
+msgid "HK Movies"
+msgstr "香港電影"
+
+msgctxt "#33003"
+msgid "HK Variety"
+msgstr "香港綜藝節目"
+
+msgctxt "#33004"
+msgid "Chinese Drama"
+msgstr "中國電視劇"
+
+msgctxt "#33005"
+msgid "Taiwanese Drama"
+msgstr "台灣電視劇"
+
+msgctxt "#33006"
+msgid "Korean Drama"
+msgstr "韓國電視劇"
+
+msgctxt "#33007"
+msgid "Korean Variety"
+msgstr "韓國綜藝節目"
+
+msgctxt "#33008"
+msgid "Japanese Drama"
+msgstr "日本電視劇"
+
+msgctxt "#33009"
+msgid "Movies"
+msgstr "電影"
+
+msgctxt "#33010"
+msgid "Search"
+msgstr "搜索"
+
+msgctxt "#33011"
+msgid "Saved List"
+msgstr "我的收藏"
+
+msgctxt "#33012"
+msgid "Chinese Drama (Cantonese)"
+msgstr "中國電視劇 (粵語)"
+
+msgctxt "#33013"
+msgid "Taiwanese Drama (Cantonese)"
+msgstr "台灣電視劇 (粵語)"
+
+msgctxt "#33014"
+msgid "Korean Drama (Cantonese)"
+msgstr "韓國電視劇 (粵語)"
+
+msgctxt "#33015"
+msgid "Korean Drama (Chinese Subtitles)"
+msgstr "韓國電視劇 (中文字幕)"
+
+msgctxt "#33016"
+msgid "Japanese Drama (Cantonese)"
+msgstr "日本電視劇 (粵語)"
+
+msgctxt "#33017"
+msgid "Japanese Drama (Chinese Subtitles)"
+msgstr "日本電視劇 (中文字幕)"
+
+# Views
+###################################
+
+msgctxt "#33100"
+msgid "Select stream"
+msgstr "選擇串流"
+
+msgctxt "#33101"
+msgid "Play"
+msgstr "播放"
+
+msgctxt "#33102"
+msgid "Page %s"
+msgstr "第%s頁"
+
+msgctxt "#33103"
+msgid "First page"
+msgstr "首頁"
+
+msgctxt "#33104"
+msgid "Last page"
+msgstr "尾頁"
+
+msgctxt "#33105"
+msgid "Episode %s"
+msgstr "第%s集"
+
+msgctxt "#33106"
+msgid "Part %s"
+msgstr "第%s部分"
+
+msgctxt "#33107"
+msgid "Full"
+msgstr "完整"
+
+msgctxt "#33108"
+msgid "Add to Saved List"
+msgstr "儲存至我的收藏"
+
+msgctxt "#33109"
+msgid "Remove from Saved List"
+msgstr "從我的收藏中刪除"
+
+msgctxt "#33110"
+msgid "Chinese Subtitles"
+msgstr "中文字幕"
+
+msgctxt "#33111"
+msgid "English Subtitles"
+msgstr "英文字幕"
+
+msgctxt "#33112"
+msgid "Cantonese"
+msgstr "粵語"
+
+msgctxt "#33113"
+msgid "Mandarin"
+msgstr "普通話"
+
+# Settings
+###################################
+
+msgctxt "#33200"
+msgid "Title Language"
+msgstr "標題語言"
+
+msgctxt "#33201"
+msgid "English and original title"
+msgstr "英文及原本名稱"
+
+msgctxt "#33202"
+msgid "English title"
+msgstr "英文名稱"
+
+msgctxt "#33203"
+msgid "Original title"
+msgstr "原本名稱"
+
+msgctxt "#33204"
+msgid "User-Agent"
+msgstr "使用者识别字串"
+
+# Messages
+###################################
+
+msgctxt "#33300"
+msgid "Failed to resolve URL"
+msgstr "未能獲得視頻網址"
+
+msgctxt "#33301"
+msgid "Search"
+msgstr "搜索"
+
+msgctxt "#33302"
+msgid "Added to saved list"
+msgstr "已儲存至我的收藏"
+
+msgctxt "#33303"
+msgid "Removed from saved list"
+msgstr "已從我的收藏中刪除"
+
+msgctxt "#33304"
+msgid "No search results"
+msgstr "沒有搜索結果"
