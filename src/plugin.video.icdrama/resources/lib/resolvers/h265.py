@@ -16,14 +16,12 @@ class H265(UrlResolver):
 
         html = common.webread(url)
         if not len(html):
-            common.error('H265 resolver: no html from ' + url)
-            return ''
+            raise ResolverError('H265 resolver: no html from ' + url)
 
         streams = self._extract_streams(html)
 
         if not streams:
-            common.error('H265 resolver: no streams found in ' + url)
-            return ''
+            raise ResolverError('H265 resolver: no streams found in ' + url)
 
         urls, labels = zip(*streams)
 
@@ -36,7 +34,7 @@ class H265(UrlResolver):
                 common.error("H265 resolver: stream selection cancelled")
                 return ''
 
-        return urls[ind] + '|User-Agent=' + xbmcaddon.Addon().getSetting('user_agent')
+        return urls[ind] + '|User-Agent=' + urllib.quote(xbmcaddon.Addon().getSetting('user_agent'))
 
     def get_url(self, host, media_id):
         if host != self.host:
@@ -54,9 +52,6 @@ class H265(UrlResolver):
     def valid_url(self, web_url, host):
         r = re.match(self.url_pattern, web_url)
         return bool(r) or (host == self.host)
-
-    def _unobscurify(self, s, key):
-        return urllib.unquote(''.join(chr(ord(c) - key) for c in urllib.unquote(s)))
 
     def _extract_streams(self, html):
         '''Return list of streams (tuples (url, label))

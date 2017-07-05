@@ -174,7 +174,7 @@ def play_mirror(url):
             li = xbmcgui.ListItem(title)
             li.setThumbnailImage(image)
             if 'User-Agent=' not in vidurl:
-                vidurl = vidurl + "|User-Agent=" + xbmcaddon.Addon().getSetting('user_agent')
+                vidurl = vidurl + "|User-Agent=" + urllib.quote(xbmcaddon.Addon().getSetting('user_agent'))
             xbmc.Player().play(vidurl, li)
 
 @_dir_action

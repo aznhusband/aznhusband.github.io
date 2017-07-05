@@ -14,28 +14,23 @@ class Icdrama(UrlResolver):
 
         html = common.webread(weburl)
         if not html:
-            common.error("Icdrama resolver: Couldn't get html from " + weburl)
-            return ''
+            raise ResolverError("Icdrama resolver: Couldn't get html from " + weburl)
 
         soup = BeautifulSoup(html, 'html5lib')
         if not soup:
-            common.error("Icdrama resolver: Couldn't parse html from " + weburl)
-            return ''
+            raise ResolverError("Icdrama resolver: Couldn't parse html from " + weburl)
 
         iframe = soup.find('iframe')
         if not iframe:
-            common.error("Icdrama resolver: Couldn't iframe in html from " + weburl)
-            return ''
+            raise ResolverError("Icdrama resolver: Couldn't find iframe in html from " + weburl)
 
         url = iframe['src']
         if not url:
-            common.error("Icdrama resolver: Couldn't find url in html from " + weburl)
-            return ''
+            raise ResolverError("Icdrama resolver: Couldn't find url in html from " + weburl)
 
         mediaurl = urlresolver.resolve(url)
         if not mediaurl:
-            common.error("Icdrama resolver: resolve failed for mediaurl " + url)
-            return ''
+            raise ResolverError("Icdrama resolver: resolve failed for mediaurl " + url)
 
         return mediaurl
 

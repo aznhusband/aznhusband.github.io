@@ -19,14 +19,12 @@ class Videobug(UrlResolver):
 
         html = common.webread(url)
         if not len(html):
-            common.error('Videobug resolver: no html from ' + url)
-            return ''
+            raise ResolverError('Videobug resolver: no html from ' + url)
 
         streams = self._extract_streams(html)
 
         if not streams:
-            common.error('Videobug resolver: no streams found in ' + url)
-            return ''
+            raise ResolverError('Videobug resolver: no streams found in ' + url)
 
         urls, labels = zip(*streams)
 
@@ -46,8 +44,7 @@ class Videobug(UrlResolver):
         else:
             mediaurl = urlresolver.resolve(urls[ind])
             if not mediaurl:
-                common.error("Videobug resolver: resolve failed for mediaurl " + urls[ind])
-                return ''
+                raise ResolverError("Videobug resolver: resolve failed for mediaurl " + urls[ind])
 
             return mediaurl
 
