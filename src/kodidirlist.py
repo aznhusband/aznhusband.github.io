@@ -13,7 +13,7 @@ def print_sizes(root):
     for name in sorted(os.listdir(root)):
         if name == 'index.html':
             continue
-        print '<a href="%s">%s</a><td>%s</td>' % (name, name, sizeof_fmt(os.stat(name).st_size))
+        print '<a href="%s">%s</a><td>%d</td>' % (name, name, os.stat(name).st_size)
 
 
 print_sizes('.')
