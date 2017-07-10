@@ -3,7 +3,8 @@ import xbmcgui
 import urllib
 import functools
 import xbmcaddon
-from resources.lib import config, common, scrapers, store, cleanstring, cache
+from urlresolver.lib.net import get_ua
+from lib import config, common, scrapers, store, cleanstring, cache
 
 actions = []
 def _action(func):
@@ -174,7 +175,7 @@ def play_mirror(url):
             li = xbmcgui.ListItem(title)
             li.setThumbnailImage(image)
             if 'User-Agent=' not in vidurl:
-                vidurl = vidurl + "|User-Agent=" + urllib.quote(xbmcaddon.Addon().getSetting('user_agent'))
+                vidurl = vidurl + '|User-Agent=' + urllib.quote(get_ua())
             xbmc.Player().play(vidurl, li)
 
 @_dir_action

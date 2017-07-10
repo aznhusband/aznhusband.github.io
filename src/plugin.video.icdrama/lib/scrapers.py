@@ -2,7 +2,7 @@ import re
 import urllib
 from urlparse import urljoin, urlparse
 from bs4 import BeautifulSoup
-from resources.lib import cache, config, common
+from lib import cache, config, common
 
 @cache.memoize()
 def _get(url):

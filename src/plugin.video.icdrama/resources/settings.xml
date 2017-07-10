@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <settings>
   <setting id="title_language" type="select" label="33200" lvalues="33201|33202|33203" default="0"/>
-  <setting id="user_agent" type="text" label="33204" default="Mozilla/5.0 (Windows NT 10.0; Win64; x64) Gecko/20100101 Firefox/52.0"/>
 </settings>

@@ -1,7 +1,7 @@
 import sys
 from urlparse import parse_qsl
 from urllib import unquote
-from resources.lib import actions
+from lib import actions
 
 if __name__ == '__main__':
     qs = sys.argv[2]

@@ -157,10 +157,6 @@ msgctxt "#33203"
 msgid "Original title"
 msgstr "Original title"
 
-msgctxt "#33204"
-msgid "User-Agent"
-msgstr "User-Agent"
-
 # Messages
 ###################################
 

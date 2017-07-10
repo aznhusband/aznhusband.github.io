@@ -1,6 +1,6 @@
 import cPickle as pickle
 from os import makedirs
-from resources.lib import config
+from lib import config
 from os.path import isfile, dirname, exists
 
 def put(key, value):

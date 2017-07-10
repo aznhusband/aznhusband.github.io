@@ -5,9 +5,10 @@ import xbmcplugin
 import xbmcaddon
 from contextlib import contextmanager
 from os.path import abspath, dirname
-from urlresolver.hmf import HostedMediaFile
 from urllib import urlencode
-import requests
+from urlresolver.hmf import HostedMediaFile
+from urlresolver.lib.net import Net, get_ua
+#import requests
 
 _plugin_url = sys.argv[0]
 _handle = int(sys.argv[1])
@@ -22,9 +23,9 @@ def error(s):
     xbmc.log(str(s), xbmc.LOGERROR)
 
 def webread(url):
-    headers = {'User-Agent': xbmcaddon.Addon().getSetting('user_agent')}
-    response = requests.get(url, headers=headers)
-    return response.content
+    net = Net()
+    headers = {'User-Agent': get_ua()}
+    return net.http_GET(url, headers=headers).content
 
 def action_url(action, **action_args):
     action_args['action'] = action
@@ -68,7 +69,7 @@ def select(heading, options):
 
 def resolve(url):
     # import the resolvers so that urlresolvers pick them up
-    import resources.lib.resolvers
+    import lib.resolvers
     hmf = HostedMediaFile(url)
     try:
         return hmf.resolve()
