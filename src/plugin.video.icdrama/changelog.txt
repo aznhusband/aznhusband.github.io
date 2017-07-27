@@ -1,3 +1,6 @@
+1.4.0 - 2017-07-27
+ - rewrite of videobug resolver to adapt to site changes.
+
 1.2.7 - 2017-06-27
  - Moved to python "requests" for web operations.
  - User-Agent now a setting.

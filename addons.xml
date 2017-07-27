@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addons>
 
-  <addon id="plugin.video.icdrama" version="1.3.0" name="Icdrama" provider-name="aznhusband, cthlo">
+  <addon id="plugin.video.icdrama" version="1.4.0" name="Icdrama" provider-name="aznhusband, General-Meow, cthlo">
     <requires>
       <import addon="xbmc.python" version="2.1.0"/>
       <import addon="script.module.html5lib" version="0.999.0"/>
       <import addon="script.module.beautifulsoup4" version="4.3.2"/>
+      <import addon="script.module.requests" version="2.9.1"/>
       <import addon="script.module.urlresolver" version="3.0.34"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon.py">
