@@ -75,21 +75,30 @@ class Videobug(UrlResolver):
             # error, bail.
             return streams
 
+        unobscured = None
+
         # Search for the obscured list of data, and decode.
         oblist = re.search(r"\[([\\\'xa-f0-9,]*)\]", html)
-        data = eval(oblist.group(0))
-        unobscured = None
-        for d in data:
-            if len(d) > 10:
-                unobscured = self._unobscurify(d, 'V_TOKEN')
-                if unobscured:
-                    break
+        if oblist:
+            data = eval(oblist.group(0))
+            for d in data:
+                if len(d) > 10:
+                    unobscured = self._unobscurify(d, 'V_TOKEN')
+                    if unobscured:
+                        break
 
         if not unobscured:
             # Might be in the dF
             df = re.search(r"dF\(('[\\xa-f0-9]*')\)", html)
-            obscured = eval(df.group(1))
-            unobscured = self._unobscurify(obscured, 'V_TOKEN')
+            if df:
+                obscured = eval(df.group(1))
+                unobscured = self._unobscurify(obscured, 'V_TOKEN')
+
+        # lol, maybe it's not obscured at all!
+        for line in html.splitlines():
+            if 'V_TOKEN' in line:
+                unobscured = line
+                break
 
         if not unobscured:
             return streams
