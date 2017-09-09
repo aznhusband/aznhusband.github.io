@@ -88,8 +88,15 @@ class Videobug(UrlResolver):
         if not unobscured:
             # Might be in the dF
             df = re.search(r"dF\(('[\\xa-f0-9]*')\)", html)
-            obscured = eval(df.group(1))
-            unobscured = self._unobscurify(obscured, 'V_TOKEN')
+            if df:
+                obscured = eval(df.group(1))
+                unobscured = self._unobscurify(obscured, 'V_TOKEN')
+
+        if not unobscured:
+            # Just search HTML contents for variables
+            var_line = re.search("var V_REQUEST.+?V_TOKEN.+?V_TIME.+", html)
+            if var_line:
+                unobscured = var_line.group(0)
 
         if not unobscured:
             return streams
@@ -101,7 +108,7 @@ class Videobug(UrlResolver):
             if 'V_TOKEN' in var:
                 V_TOKEN = re.findall(r'\"(.+?)\"', var)[0]
             if 'V_TIME' in var:
-                V_TIME = re.findall(r' ([0-9]+)', unobscured)[0]
+                V_TIME = re.findall(r' ([0-9]+)', var)[0]
 
         # Make the ajax call
         session = requests.Session()
