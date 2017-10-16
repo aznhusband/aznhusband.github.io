@@ -79,6 +79,10 @@ msgctxt "#33017"
 msgid "Japanese Drama (Chinese Subtitles)"
 msgstr "日本電視劇 (中文字幕)"
 
+msgctxt "#33018"
+msgid "Animation"
+msgstr "動畫"
+
 # Views
 ###################################
 

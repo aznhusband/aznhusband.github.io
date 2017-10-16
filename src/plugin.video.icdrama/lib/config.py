@@ -27,5 +27,6 @@ index_items = [
     diritem(33016, action_url('shows', url=urljoin(base_url, '/japanese-drama-cantonesedub/'))),
     diritem(33017, action_url('shows', url=urljoin(base_url, '/japanese-drama-chinesesubtitles/'))),
     diritem(33009, action_url('shows', url=urljoin(base_url, '/movies/'))),
+    diritem(33018, action_url('shows', url=urljoin(base_url, '/genre/25-animation.html'))),
     diritem(33010, action_url('search'))
 ]
