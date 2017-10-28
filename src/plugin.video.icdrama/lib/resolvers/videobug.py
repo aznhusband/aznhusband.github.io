@@ -1,6 +1,7 @@
 import re
 import json
 from urllib import unquote
+from urlparse import urlparse
 import base64
 import requests
 from bs4 import BeautifulSoup
@@ -13,7 +14,6 @@ class Videobug(UrlResolver):
     name = 'Videobug'
     domains = [ 'videobug.se' ]
     pattern = '(?://|\.)(videobug\.se)/(.+)'
-
 
     def __init__(self):
         self.net = common.Net()
@@ -57,13 +57,101 @@ class Videobug(UrlResolver):
         '''
         streams = [] # list of tuples (url, label)
 
-        methods = [ self.__method1, self.__method2, self.__method3, self.__method4, self.__method5 ]
+        methods = [self.__method6]
         for method in methods:
             streams = method(response)
             if streams:
                 return streams
         raise ResolverError('Videobug resolver: no streams found in ' + url)
 
+    def __method6(self, response):
+        streams = []
+
+        if response.status_code != 200:
+            return streams
+
+        html = response.content
+        base_url = self._get_base_url(response.url)
+        post_url = self._get_post_url(html, base_url)
+        data = self._get_post_data(html, base_url)
+
+        if post_url and data:
+            streams_json = self._get_streams_data(post_url, data)
+            streams = self._parse_streams(streams_json)
+
+        return streams
+
+    def _get_base_url(self, url):
+        parsed_uri = urlparse(url)
+        domain = '{uri.scheme}://{uri.netloc}'.format(uri=parsed_uri)
+
+        return domain
+
+    def _get_post_url(self, html, base_url):
+        for line in html.splitlines():
+            if 'VB_POST_URL' in line:
+                results = re.findall(r'\"(.+?)\"', line)
+
+                if results:
+                    return base_url + results[0]
+                else:
+                    return None
+
+        return None
+
+    def _get_post_data(self, html, base_url):
+        results = re.findall(r'<script.+src="(.+\.vbjs\.html)".+(<\/script>|\/>)', html)
+
+        if results:
+            url = base_url + results[0][0]
+            response = requests.get(url)
+
+            if response.status_code == 200:
+                unobscured = response.content
+                vbid = ''
+                vbtoken = ''
+                vbname = ''
+                for var in unobscured.split(';'):
+                    if 'VB_ID' in var:
+                        vbid = re.findall(r'\"(.+?)\"', var)[0]
+                    if 'VB_TOKEN' in var:
+                        vbtoken = re.findall(r'\"(.+?)\"', var)[0]
+                    if 'VB_NAME' in var:
+                        vbname = re.findall(r'\"(.+?)\"', var)[0]
+
+                return  {
+                    'VB_ID': vbid,
+                    'VB_TOKEN': vbtoken,
+                    'VB_NAME': vbname
+                }
+
+        return None
+
+    def _get_streams_data(self, url, data):
+        # Make the ajax call
+        session = requests.Session()
+
+        self.headers['Referer'] = url
+        self.headers['X-Requested-With'] = 'XMLHttpRequest'
+        self.headers['Accept'] = 'application/json, text/javascript, */*; q=0.01'
+        self.headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8'
+
+        response = session.post(url, data=data, headers=self.headers)
+        if response.status_code != 200:
+            return None
+
+        return json.loads(response.content)
+
+    def _parse_streams(self, data):
+        streams = []
+
+        if data:
+            strdecode = lambda s: base64.b64decode(unquote(s))
+            exclude = ['Subtitles', 'image', 'JS', 'ADV']
+            videos = [h for h in data if h['s'] not in exclude]
+            streams = [(h['s'], strdecode(h['u'])) for h in videos]
+
+        return streams
 
     def __method1(self, response):
         streams = []

@@ -19,9 +19,9 @@ class Icdrama(UrlResolver):
             weburl = self.get_url(host, media_id)
             html   = self.net.http_GET(weburl, headers=self.headers).content
             iframe = BeautifulSoup(html, 'html5lib').find('iframe')
+            return urlresolver.resolve(iframe['src'])
         except:
-            raise ResolverError('Icdrama resolver: Failed for ' + weburl)
-        return urlresolver.resolve(iframe['src'])
+            return None
 
 
     def get_url(self, host, media_id):
