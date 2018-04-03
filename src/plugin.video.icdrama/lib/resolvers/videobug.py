@@ -147,7 +147,10 @@ class Videobug(UrlResolver):
         if response.status_code != 200:
             return None
 
-        return json.loads(response.content)
+        #Band-aid fix. No idea what the first three characters are, but they are messing with the json. Removed them. - mugol
+        json_content = response.content[3:]
+
+        return json.loads(json_content)
 
     def _parse_streams(self, data):
         streams = []
