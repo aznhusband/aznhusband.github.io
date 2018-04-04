@@ -26,15 +26,22 @@ class Videobug(UrlResolver):
         headers['Referer'] = 'http://icdrama.se'
 
         response = requests.get(url, headers=headers)
-        streams = self._extract_streams(response)
-        url = helpers.pick_source(streams, auto_pick=False)
 
-        if ('redirector.googlevideo.com' in url or
-            'blogspot.com' in url):
+        #Videobug changed their video links, trying to get the raw link back. - mugol
+        wrapped_url = response.url
+        unwrapped_url = urlparse(wrapped_url).query
+        unwrapped_url = unwrapped_url.replace("http", "https")
+        unwrapped_response = requests.get(unwrapped_url, headers=headers)
+
+        streams = self._extract_streams(unwrapped_response)
+        unwrapped_url = helpers.pick_source(streams, auto_pick=False)
+
+        if ('redirector.googlevideo.com' in unwrapped_url or
+            'blogspot.com' in unwrapped_url):
             # Kodi can play directly, skip further resolve
-            return url
+            return unwrapped_url
 
-        return urlresolver.resolve(url)
+        return urlresolver.resolve(unwrapped_url)
 
 
     def get_url(self, host, media_id):
@@ -140,7 +147,10 @@ class Videobug(UrlResolver):
         if response.status_code != 200:
             return None
 
-        return json.loads(response.content)
+        #Band-aid fix. No idea what the first three characters are, but they are messing with the json. Removed them. - mugol
+        json_content = response.content[3:]
+
+        return json.loads(json_content)
 
     def _parse_streams(self, data):
         streams = []
