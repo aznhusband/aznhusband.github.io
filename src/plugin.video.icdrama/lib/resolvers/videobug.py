@@ -26,14 +26,7 @@ class Videobug(UrlResolver):
         headers['Referer'] = 'http://icdrama.se'
 
         response = requests.get(url, headers=headers)
-
-        #Videobug changed their video links, trying to get the raw link back. - mugol
-        wrapped_url = response.url
-        unwrapped_url = urlparse(wrapped_url).query
-        # unwrapped_url = unwrapped_url.replace("http", "https")
-        unwrapped_response = requests.get(unwrapped_url, headers=headers)
-
-        streams = self._extract_streams(unwrapped_response)
+        streams = self._extract_streams(response)
         unwrapped_url = helpers.pick_source(streams, auto_pick=False)
 
         if ('redirector.googlevideo.com' in unwrapped_url or
