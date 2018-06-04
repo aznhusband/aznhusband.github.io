@@ -68,8 +68,6 @@ def select(heading, options):
     return _dialog.select(heading, options)
 
 def resolve(url):
-    # import the resolvers so that urlresolvers pick them up
-    import lib.resolvers
     hmf = HostedMediaFile(url)
     try:
         return hmf.resolve()
