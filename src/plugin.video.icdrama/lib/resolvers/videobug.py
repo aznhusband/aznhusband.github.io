@@ -12,8 +12,8 @@ from urlresolver.plugins.lib import jsunpack, helpers
 
 class Videobug(UrlResolver):
     name = 'Videobug'
-    domains = [ 'videobug.se' ]
-    pattern = '(?://|\.)(videobug\.se)/(.+)'
+    domains = [ 'videobug.se', 'vlist.se']
+    pattern = '(?://|\.)(videobug\.se|vlist\.se)/(.+)'
 
     def __init__(self):
         self.net = common.Net()
