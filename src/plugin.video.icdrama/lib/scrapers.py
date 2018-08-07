@@ -7,7 +7,7 @@ from lib import cache, config, common
 @cache.memoize()
 def _get(url):
     # only scrape within the site
-    if url.startswith(config.base_url): # good enough check
+    if any(domain in url for domain in config.domains): # good enough check
         # should not be larger than 1MB
         return common.webread(url)
     else:
