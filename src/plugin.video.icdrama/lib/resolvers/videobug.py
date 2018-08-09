@@ -27,13 +27,6 @@ class Videobug(UrlResolver):
 
         response = requests.get(url, headers=headers)
 
-        #Videobug changed their video links, trying to get the raw link back. - mugol
-        # wrapped_url = response.url
-        # unwrapped_url = urlparse(wrapped_url).query
-        # unwrapped_url = unwrapped_url.replace("http", "https")
-        # unwrapped_response = requests.get(unwrapped_url, headers=headers)
-
-        #streams = self._extract_streams(unwrapped_response)
         streams = self._extract_streams(response)
         unwrapped_url = helpers.pick_source(streams, auto_pick=False)
 
@@ -108,30 +101,29 @@ class Videobug(UrlResolver):
         return None
 
     def _get_post_data(self, html, base_url):
-        results = re.findall(r'<script.+src="(.+\.vbjs\.html)".+(<\/script>|\/>)', html)
+        results = re.findall(r'<script.+src="(.+\.vbjs\.html)".+decodeURIComponent\("(.+?)"\).+?R\[.+?\]\}\}\(''(.+?)''\).+(<\/script>|\/>)', html)
 
         if results:
-            url = base_url + results[0][0]
-            response = requests.get(url)
+            try:
+                key = results[0][2]
+                key = key.replace("'", "")
+                encrypted_string = unquote(results[0][1])
+                decoded_result = ''
 
-            if response.status_code == 200:
-                unobscured = response.content
-                vbid = ''
-                vbtoken = ''
-                vbname = ''
-                for var in unobscured.split(';'):
-                    if 'VB_ID' in var:
-                        vbid = re.findall(r'\"(.+?)\"', var)[0]
-                    if 'VB_TOKEN' in var:
-                        vbtoken = re.findall(r'\"(.+?)\"', var)[0]
-                    if 'VB_NAME' in var:
-                        vbname = re.findall(r'\"(.+?)\"', var)[0]
+                for c in range(0, len(encrypted_string)):
+                    code = ord(encrypted_string[c]) ^ ord(key[c % len(key)])
+                    character = chr(code)
+                    decoded_result = decoded_result + character
 
+                data = decoded_result.split('~|.')
                 return  {
-                    'VB_ID': vbid,
-                    'VB_TOKEN': vbtoken,
-                    'VB_NAME': vbname
+                    'VB_ID': data[1],
+                    'VB_TOKEN': data[0],
+                    'VB_NAME': ''
                 }
+            except Exception as e:
+                import xbmc
+                xbmc.log(str(e), xbmc.LOGERROR)
 
         return None
 
