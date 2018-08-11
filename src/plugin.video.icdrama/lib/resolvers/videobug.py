@@ -9,6 +9,7 @@ import urlresolver
 from urlresolver import common
 from urlresolver.resolver import UrlResolver, ResolverError
 from urlresolver.plugins.lib import jsunpack, helpers
+from .. import common as cmn
 
 class Videobug(UrlResolver):
     name = 'Videobug'
@@ -26,15 +27,20 @@ class Videobug(UrlResolver):
         headers['Referer'] = 'http://icdrama.se'
 
         response = requests.get(url, headers=headers)
-
-        streams = self._extract_streams(response)
-        unwrapped_url = helpers.pick_source(streams, auto_pick=False)
+        
+        unwrapped_url = ''
+        if 'videoredirect.php?' in url: #for current Openload source & other possible redirects
+            unwrapped_url = response.url
+        else:
+            streams = self._extract_streams(response)
+            unwrapped_url = helpers.pick_source(streams, auto_pick=False)
 
         if ('redirector.googlevideo.com' in unwrapped_url or
-            'blogspot.com' in unwrapped_url):
+            'blogspot.com' in unwrapped_url or
+            'fbcdn.net' in unwrapped_url): #for current Videobug source
             # Kodi can play directly, skip further resolve
             return unwrapped_url
-
+        
         return urlresolver.resolve(unwrapped_url)
 
 
@@ -63,14 +69,14 @@ class Videobug(UrlResolver):
             streams = method(response)
             if streams:
                 return streams
-        raise ResolverError('Videobug resolver: no streams found in ' + url)
+        raise ResolverError('Videobug resolver: no streams found in ' + response.url)
 
     def __method6(self, response):
         streams = []
 
         if response.status_code != 200:
             return streams
-
+    
         html = response.content
         base_url = self._get_base_url(response.url)
         post_url = self._get_post_url(html, base_url)
@@ -101,9 +107,18 @@ class Videobug(UrlResolver):
         return None
 
     def _get_post_data(self, html, base_url):
-        results = re.findall(r'<script.+src="(.+\.vbjs\.html)".+decodeURIComponent\("(.+?)"\).+?R\[.+?\]\}\}\(''(.+?)''\).+(<\/script>|\/>)', html)
-
+        results = re.findall(r'<script>.*?VB_TOKEN.*?=.*?"(.+?)";.*?VB_ID.*?=.*?"(.+?)";.*?<\/script>', html)
         if results:
+            try:
+                return  {
+                    'VB_ID': results[0][1],
+                    'VB_TOKEN': results[0][0],
+                    'VB_NAME': ''
+                }
+            except Exception as e:
+                cmn.error("Icdrama: " + str(e))
+        else:
+            results = re.findall(r'<script.+src="(.+\.vbjs\.html)".+decodeURIComponent\("(.+?)"\).+?R\[.+?\]\}\}\(''(.+?)''\).+(<\/script>|\/>)', html)
             try:
                 key = results[0][2]
                 key = key.replace("'", "")
@@ -122,19 +137,7 @@ class Videobug(UrlResolver):
                     'VB_NAME': ''
                 }
             except Exception as e:
-                import xbmc
-                xbmc.log(str(e), xbmc.LOGERROR)
-        else:
-            try:
-                results = re.findall(r'<script.+src=".+\.vbjs\.html".+VB_TOKEN\s+?=\s+?"(.+?)".+VB_ID\s+?=\s+?"(.+?)".+(<\/script>|\/>)', html)
-                return  {
-                    'VB_ID': results[0][1],
-                    'VB_TOKEN': results[0][0],
-                    'VB_NAME': ''
-                }
-            except Exception as e:
-                import xbmc
-                xbmc.log(str(e), xbmc.LOGERROR)
+                cmn.error("Icdrama: " + str(e))
 
         return None
 
