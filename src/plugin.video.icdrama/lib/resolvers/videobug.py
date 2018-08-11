@@ -124,6 +124,17 @@ class Videobug(UrlResolver):
             except Exception as e:
                 import xbmc
                 xbmc.log(str(e), xbmc.LOGERROR)
+        else:
+            try:
+                results = re.findall(r'<script.+src=".+\.vbjs\.html".+VB_TOKEN\s+?=\s+?"(.+?)".+VB_ID\s+?=\s+?"(.+?)".+(<\/script>|\/>)', html)
+                return  {
+                    'VB_ID': results[0][1],
+                    'VB_TOKEN': results[0][0],
+                    'VB_NAME': ''
+                }
+            except Exception as e:
+                import xbmc
+                xbmc.log(str(e), xbmc.LOGERROR)
 
         return None
 
