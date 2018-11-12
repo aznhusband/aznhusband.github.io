@@ -5,8 +5,8 @@ from urlresolver.resolver import UrlResolver, ResolverError
 
 class Icdrama(UrlResolver):
     name = 'Icdrama'
-    domains = [ 'icdrama.se' ]
-    pattern = '(?://|\.)(icdrama\.se)/(.+)'
+    domains = [ 'icdrama.se', 'icdrama.to' ]
+    pattern = '(?://|\.)(icdrama\.se|icdrama\.to)/(.+)'
 
 
     def __init__(self):
