@@ -9,6 +9,7 @@ import urlresolver
 from urlresolver import common
 from urlresolver.resolver import UrlResolver, ResolverError
 from urlresolver.plugins.lib import helpers
+from .. import common as cmn
 
 class Icdrama(UrlResolver):
     name = 'Icdrama'
@@ -28,13 +29,11 @@ class Icdrama(UrlResolver):
             headers['Referer'] = 'http://icdrama.to'
 
             response = requests.get(url, headers=headers)
+            streams = self._extract_streams(response)
+            cmn.debug("Icdrama: Extracted links... " + str(streams))
             
             unwrapped_url = ''
-            if 'videoredirect.php?' in url: #for current Openload source & other possible redirects
-                unwrapped_url = response.url
-            else:
-                streams = self._extract_streams(response)
-                unwrapped_url = helpers.pick_source(streams, auto_pick=False)
+            unwrapped_url = helpers.pick_source(streams, auto_pick=False)
 
             if ('redirector.googlevideo.com' in unwrapped_url or
                 'blogspot.com' in unwrapped_url or
