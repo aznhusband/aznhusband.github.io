@@ -24,7 +24,7 @@ class Videobug(UrlResolver):
     def get_media_url(self, host, media_id):
         url = self.get_url(host, media_id)
         headers = self.headers
-        headers['Referer'] = 'http://icdrama.se'
+        headers['Referer'] = 'http://icdrama.to'
 
         response = requests.get(url, headers=headers)
         
@@ -33,6 +33,7 @@ class Videobug(UrlResolver):
             unwrapped_url = response.url
         else:
             streams = self._extract_streams(response)
+            cmn.debug("Videobug: Extracted links... " + str(streams))
             unwrapped_url = helpers.pick_source(streams, auto_pick=False)
 
         if ('redirector.googlevideo.com' in unwrapped_url or
