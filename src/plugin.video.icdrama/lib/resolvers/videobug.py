@@ -24,7 +24,7 @@ class Videobug(UrlResolver):
     def get_media_url(self, host, media_id):
         url = self.get_url(host, media_id)
         headers = self.headers
-        headers['Referer'] = 'http://icdrama.se'
+        headers['Referer'] = 'http://icdrama.to'
 
         response = requests.get(url, headers=headers)
         
