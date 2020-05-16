@@ -5,13 +5,13 @@ from urlparse import urlparse
 import base64
 import requests
 from bs4 import BeautifulSoup
-import urlresolver
-from urlresolver import common
-from urlresolver.resolver import UrlResolver, ResolverError
-from urlresolver.plugins.lib import jsunpack, helpers
+import resolveurl
+from resolveurl import common
+from resolveurl.resolver import ResolveUrl, ResolverError
+from resolveurl.plugins.lib import jsunpack, helpers
 from .. import common as cmn
 
-class Videobug(UrlResolver):
+class Videobug(ResolveUrl):
     name = 'Videobug'
     domains = [ 'videobug.se', 'vlist.se']
     pattern = '(?://|\.)(videobug\.se|vlist\.se)/(.+)'
@@ -27,7 +27,7 @@ class Videobug(UrlResolver):
         headers['Referer'] = 'http://icdrama.se'
 
         response = requests.get(url, headers=headers)
-        
+
         unwrapped_url = ''
         if 'videoredirect.php?' in url: #for current Openload source & other possible redirects
             unwrapped_url = response.url
@@ -40,8 +40,8 @@ class Videobug(UrlResolver):
             'fbcdn.net' in unwrapped_url): #for current Videobug source
             # Kodi can play directly, skip further resolve
             return unwrapped_url
-        
-        return urlresolver.resolve(unwrapped_url)
+
+        return resolveurl.resolve(unwrapped_url)
 
 
     def get_url(self, host, media_id):
@@ -76,7 +76,7 @@ class Videobug(UrlResolver):
 
         if response.status_code != 200:
             return streams
-    
+
         html = response.content
         base_url = self._get_base_url(response.url)
         post_url = self._get_post_url(html, base_url)

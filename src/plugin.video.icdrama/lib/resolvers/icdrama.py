@@ -5,12 +5,12 @@ from urlparse import urlparse
 import base64
 import requests
 from bs4 import BeautifulSoup
-import urlresolver
-from urlresolver import common
-from urlresolver.resolver import UrlResolver, ResolverError
-from urlresolver.plugins.lib import helpers
+import resolveurl
+from resolveurl import common
+from resolveurl.resolver import ResolveUrl, ResolverError
+from resolveurl.plugins.lib import helpers
 
-class Icdrama(UrlResolver):
+class Icdrama(ResolveUrl):
     name = 'Icdrama'
     domains = [ 'icdrama.se', 'icdrama.to']
     pattern = '(?://|\.)(icdrama\.se|icdrama\.to)/(.+)'
@@ -28,7 +28,7 @@ class Icdrama(UrlResolver):
             headers['Referer'] = 'http://icdrama.to'
 
             response = requests.get(url, headers=headers)
-            
+
             unwrapped_url = ''
             if 'videoredirect.php?' in url: #for current Openload source & other possible redirects
                 unwrapped_url = response.url
@@ -41,13 +41,13 @@ class Icdrama(UrlResolver):
                 'fbcdn.net' in unwrapped_url): #for current Videobug source
                 # Kodi can play directly, skip further resolve
                 return unwrapped_url
-            
-            return urlresolver.resolve(unwrapped_url)
+
+            return resolveurl.resolve(unwrapped_url)
         else:
             try:
                 html   = self.net.http_GET(url, headers=self.headers).content
                 iframe = BeautifulSoup(html, 'html5lib').find('iframe')
-                return urlresolver.resolve(iframe['src'])
+                return resolveurl.resolve(iframe['src'])
             except:
                 return None
 
@@ -68,7 +68,7 @@ class Icdrama(UrlResolver):
 
         if response.status_code != 200:
             return streams
-    
+
         html = response.content
         post_url = self._get_post_url(html)
         data = self._get_post_data(html)

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addons>
 
-  <addon id="plugin.video.icdrama" version="1.9.6" name="Icdrama" provider-name="aznhusband, dumbo0001, boleanly, mugol, General-Meow, cthlo">
+  <addon id="plugin.video.icdrama" version="2.0.1" name="Icdrama" provider-name="aznhusband, dumbo0001, boleanly, mugol, General-Meow, cthlo">
     <requires>
       <import addon="xbmc.python" version="2.1.0"/>
       <import addon="script.module.html5lib" version="0.999.0"/>
       <import addon="script.module.beautifulsoup4" version="4.3.2"/>
       <import addon="script.module.requests" version="2.9.1"/>
-      <import addon="script.module.urlresolver" version="3.0.34"/>
+      <import addon="script.module.resolveurl" version="5.0.38"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon.py">
       <provides>video</provides>
@@ -19,22 +19,6 @@
       <platform>all</platform>
       <license>MIT License</license>
     </extension>
-  </addon>
-
-  <addon id="script.module.urlresolver" name="URLResolver" version="3.0.35" provider-name="tvaddons.ag, Eldorado">
-	<requires>
-		<import addon="xbmc.python" version="2.1.0" />
-		<import addon="plugin.video.youtube" optional="true" />
-		<import addon="script.module.python.twitch" optional="true" />
-		<import addon="script.module.cryptopy" version="1.2.6" optional="true" />
-	</requires>
-	<extension point="xbmc.python.module" library="lib" />
-	<extension point="xbmc.python.pluginsource" library="lib/default.py" />
-	<extension point="xbmc.addon.metadata">
-		<platform>all</platform>
-		<summary lang="en">Resolve common video host URL's to be playable in XBMC/Kodi.</summary>
-		<description lang="en">Resolve common video host URL's to be playable in XBMC/Kodi, simplify addon development of video plugins requiring multi video hosts.</description>
-	</extension>
   </addon>
 
 </addons>

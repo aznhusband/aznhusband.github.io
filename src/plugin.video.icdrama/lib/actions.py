@@ -3,7 +3,7 @@ import xbmcgui
 import urllib
 import functools
 import xbmcaddon
-from urlresolver.lib.net import get_ua
+from resolveurl.lib.net import get_ua
 from lib import config, common, scrapers, store, cleanstring, cache
 
 actions = []
