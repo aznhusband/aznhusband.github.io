@@ -1,1 +1,1 @@
-from lib.resolvers import icdrama, videobug
+from lib.resolvers import icdrama, videobug, hdplay
