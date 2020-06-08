@@ -12,8 +12,8 @@ from resolveurl.plugins.lib import helpers
 
 class Icdrama(ResolveUrl):
     name = 'Icdrama'
-    domains = [ 'icdrama.se', 'icdrama.to']
-    pattern = '(?://|\.)(icdrama\.se|icdrama\.to)/(.+)'
+    domains = [ 'adrama.to', 'icdrama.se', 'icdrama.to']
+    pattern = '(?://|\.)(adrama\.to|icdrama\.se|icdrama\.to)/(.+)'
 
 
     def __init__(self):

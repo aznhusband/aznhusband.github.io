@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.icdrama" version="2.0.1" name="Icdrama" provider-name="aznhusband, dumbo0001, boleanly, mugol, General-Meow, cthlo">
+<addon id="plugin.video.icdrama" version="2.1.0" name="Icdrama" provider-name="aznhusband, dumbo0001, s_h, boleanly, mugol, General-Meow, cthlo">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.html5lib" version="0.999.0"/>

@@ -3,6 +3,8 @@ import xbmcgui
 import urllib
 import functools
 import xbmcaddon
+from bs4 import BeautifulSoup
+from urlparse import urljoin
 from resolveurl.lib.net import get_ua
 from lib import config, common, scrapers, store, cleanstring, cache
 
@@ -165,7 +167,11 @@ def remove_saved(eng_name, ori_name, show_url, image):
 @_action
 def play_mirror(url):
     with common.busy_indicator():
-        vidurl = common.resolve(url)
+        soup = BeautifulSoup(common.webread(url), 'html5lib')
+        iframe = soup.find(id='iframeplayer')
+        iframe_url = urljoin(config.base_url, iframe.attrs['src'])
+        vidurl = common.resolve(iframe_url)
+
         if vidurl:
             try:
                 title, image = scrapers.title_image(url)
