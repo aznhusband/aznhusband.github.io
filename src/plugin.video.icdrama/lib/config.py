@@ -1,5 +1,5 @@
 import os.path
-from urlparse import urljoin
+from urllib.parse import urljoin
 from lib.common import diritem, action_url, profile_dir
 
 base_url = 'http://icdrama.to'
