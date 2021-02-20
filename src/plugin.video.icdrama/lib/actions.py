@@ -179,7 +179,7 @@ def play_mirror(url):
                 # we can proceed without the title and image
                 title, image = ('', '')
             li = xbmcgui.ListItem(title)
-            li.setThumbnailImage(image)
+            li.setArt({'thumb': image})
             if 'User-Agent=' not in vidurl:
                 vidurl = vidurl + '|User-Agent=' + urllib.parse.quote(get_ua())
             xbmc.Player().play(vidurl, li)

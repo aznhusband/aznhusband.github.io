@@ -29,7 +29,7 @@ class HdPlay(ResolveUrl):
         if response.status_code != 200:
             return ""
 
-        html = response.content        
+        html = response.content.decode("utf-8")
         match = re.search(r'var\svideo_url\s=\s"(.+?)";', html)
         if match:
             video_url = 'http://' + host + match.group(1)

@@ -1,5 +1,6 @@
 import sys
 import xbmc
+import xbmcvfs
 import xbmcgui
 import xbmcplugin
 import xbmcaddon
@@ -15,7 +16,7 @@ _plugin_url = sys.argv[0]
 _handle = int(sys.argv[1])
 _dialog = xbmcgui.Dialog()
 
-profile_dir = xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('profile'))
+profile_dir = xbmcvfs.translatePath(xbmcaddon.Addon().getAddonInfo('profile'))
 
 def debug(s):
     xbmc.log(str(s), xbmc.LOGDEBUG)
