@@ -1,3 +1,8 @@
+from __future__ import absolute_import, division, unicode_literals
+from future import standard_library
+from future.builtins import *
+standard_library.install_aliases()
+
 import sys
 from urllib.parse import parse_qsl
 from urllib.parse import unquote

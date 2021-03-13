@@ -10,13 +10,16 @@ from urllib.parse import urlencode, quote
 from resolveurl.hmf import HostedMediaFile
 import resolveurl
 from resolveurl.lib.net import Net, get_ua
-#import requests
 
 _plugin_url = sys.argv[0]
 _handle = int(sys.argv[1])
 _dialog = xbmcgui.Dialog()
 
-profile_dir = xbmcvfs.translatePath(xbmcaddon.Addon().getAddonInfo('profile'))
+if hasattr(xbmcvfs, 'translatePath'):
+    profile_dir = xbmcvfs.translatePath(xbmcaddon.Addon().getAddonInfo('profile'))
+else:
+    profile_dir = xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('profile'))
+
 
 def debug(s):
     xbmc.log(str(s), xbmc.LOGDEBUG)

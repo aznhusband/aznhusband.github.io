@@ -169,7 +169,20 @@ def play_mirror(url):
     with common.busy_indicator():
         soup = BeautifulSoup(common.webread(url), 'html5lib')
         iframe = soup.find(id='iframeplayer')
-        iframe_url = urljoin(config.base_url, iframe.attrs['src'])
+        # decode added to fix 'Cannot mix str and non-str arguments' in Python 2
+        # try catch added to fix AttributeError: 'str' object has no attribute 'decode' in Python 3
+        # Probably one of the two is not str and we need to correct that
+        base_url = config.base_url
+        iframe_src = iframe.attrs['src']
+        try:
+            base_url = config.base_url.decode('utf-8')
+        except (UnicodeDecodeError, AttributeError):
+            pass
+        try:
+            iframe_src = iframe.attrs['src'].decode('utf-8')
+        except (UnicodeDecodeError, AttributeError):
+            pass
+        iframe_url = urljoin(base_url, iframe_src)
         vidurl = common.resolve(iframe_url)
 
         if vidurl:
