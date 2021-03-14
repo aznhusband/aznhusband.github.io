@@ -1,7 +1,7 @@
 import re
 import json
-from urllib import unquote
-from urlparse import urlparse
+from urllib.parse import unquote
+from urllib.parse import urlparse
 import base64
 import requests
 from bs4 import BeautifulSoup
@@ -29,7 +29,7 @@ class HdPlay(ResolveUrl):
         if response.status_code != 200:
             return ""
 
-        html = response.content        
+        html = response.content.decode("utf-8")
         match = re.search(r'var\svideo_url\s=\s"(.+?)";', html)
         if match:
             video_url = 'http://' + host + match.group(1)

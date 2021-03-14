@@ -20,9 +20,9 @@ def page(page):
     match = re.match(r'Page (\d+)$', page)
     if match:
         page = xbmcaddon.Addon().getLocalizedString(33102) % match.group(1)
-    elif re.match(u'\u00ab First$', page):
+    elif re.match('\u00ab First$', page):
         page = xbmcaddon.Addon().getLocalizedString(33103)
-    elif re.match(u'Last \u00bb$', page):
+    elif re.match('Last \u00bb$', page):
         page = xbmcaddon.Addon().getLocalizedString(33104)
     else:
         pass

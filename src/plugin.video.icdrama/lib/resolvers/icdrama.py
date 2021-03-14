@@ -1,7 +1,7 @@
 import re
 import json
-from urllib import unquote
-from urlparse import urlparse
+from urllib.parse import unquote
+from urllib.parse import urlparse
 import base64
 import requests
 from bs4 import BeautifulSoup
@@ -36,6 +36,7 @@ class Icdrama(ResolveUrl):
                 streams = self._extract_streams(response)
                 unwrapped_url = helpers.pick_source(streams, auto_pick=False)
 
+            unwrapped_url = unwrapped_url.decode("utf-8")
             if ('redirector.googlevideo.com' in unwrapped_url or
                 'blogspot.com' in unwrapped_url or
                 'fbcdn.net' in unwrapped_url): #for current Videobug source
@@ -69,7 +70,7 @@ class Icdrama(ResolveUrl):
         if response.status_code != 200:
             return streams
 
-        html = response.content
+        html = response.content.decode("utf-8")
         post_url = self._get_post_url(html)
         data = self._get_post_data(html)
 

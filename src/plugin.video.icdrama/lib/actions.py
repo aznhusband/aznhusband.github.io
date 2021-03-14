@@ -1,10 +1,10 @@
 import xbmc
 import xbmcgui
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import functools
 import xbmcaddon
 from bs4 import BeautifulSoup
-from urlparse import urljoin
+from urllib.parse import urljoin
 from resolveurl.lib.net import get_ua
 from lib import config, common, scrapers, store, cleanstring, cache
 
@@ -102,7 +102,7 @@ def search(url=None):
         heading = xbmcaddon.Addon().getLocalizedString(33301)
         s = common.input(heading)
         if s:
-            url = config.search_url % urllib.quote(s.encode('utf8'))
+            url = config.search_url % urllib.parse.quote(s.encode('utf8'))
         else:
             return []
     di_list = []
@@ -169,7 +169,7 @@ def play_mirror(url):
     with common.busy_indicator():
         soup = BeautifulSoup(common.webread(url), 'html5lib')
         iframe = soup.find(id='iframeplayer')
-        iframe_url = urljoin(config.base_url, iframe.attrs['src'])
+        iframe_url = urljoin(config.base_url, str(iframe.attrs['src']))
         vidurl = common.resolve(iframe_url)
 
         if vidurl:
@@ -179,9 +179,9 @@ def play_mirror(url):
                 # we can proceed without the title and image
                 title, image = ('', '')
             li = xbmcgui.ListItem(title)
-            li.setThumbnailImage(image)
+            li.setArt({'thumb': image})
             if 'User-Agent=' not in vidurl:
-                vidurl = vidurl + '|User-Agent=' + urllib.quote(get_ua())
+                vidurl = vidurl + '|User-Agent=' + urllib.parse.quote(get_ua())
             xbmc.Player().play(vidurl, li)
 
 @_dir_action

@@ -1,7 +1,7 @@
 import functools
-import config
-import common
-import cPickle as pickle
+from . import config
+from . import common
+import pickle as pickle
 from os import makedirs, remove
 from datetime import datetime, timedelta
 from os.path import isfile, dirname, exists
@@ -19,7 +19,7 @@ def memoize(minutes=None):
             try:
                 namespace = func.__module__
             except AttributeError:
-                namespace = func.im_class
+                namespace = func.__self__.__class__
 
             full_func = '%s.%s' % (namespace, func.__name__)
             key = '%s(%s, %s)' % (full_func, args, kargs)
