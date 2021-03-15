@@ -204,17 +204,21 @@ msgid "Master switch"
 msgstr "Master switch"
 
 msgctxt "#33403"
-msgid "Auto select by resolution"
-msgstr "Auto select by resolution"
+msgid "Auto select source by preference"
+msgstr "Auto select source by preference"
 
 msgctxt "#33404"
+msgid "Source preference (comma separated list)"
+msgstr "Source preference (comma separated list)"
+
+msgctxt "#33405"
 msgid "Auto select first mirror"
 msgstr "Auto select first mirror"
 
-msgctxt "#33405"
+msgctxt "#33406"
 msgid "Auto select version"
 msgstr "Auto select version"
 
-msgctxt "#33406"
+msgctxt "#33407"
 msgid "Version string to match (e.g. cantonese, english)"
 msgstr "Version string to match (e.g. cantonese, english)"

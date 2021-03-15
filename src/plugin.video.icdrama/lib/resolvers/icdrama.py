@@ -45,7 +45,7 @@ class Icdrama(ResolveUrl):
             else:
                 streams = self._extract_streams(response)
 
-                if not auto_select.settings_is_set('auto_select_master_switch'):
+                if not auto_select.settings_is_set('auto_select_source'):
                     # manually pick source
                     unwrapped_url = helpers.pick_source(streams, auto_pick=False).decode("utf-8")
                     if self._url_can_play_directly(unwrapped_url):
@@ -53,7 +53,7 @@ class Icdrama(ResolveUrl):
                     return resolveurl.resolve(unwrapped_url)
                 else:
                     # automatically pick source
-                    streams.sort(key=auto_select.rank_url_by_resolutionn)
+                    streams.sort(key=auto_select.rank_url_by_preference)
                     # perform auto-select (in the order of preference) for all streams until empty
                     while len(streams) > 0:
                         source = streams.pop(0)
