@@ -5,8 +5,9 @@ import functools
 import xbmcaddon
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
+from resolveurl.resolver import ResolverError
 from resolveurl.lib.net import get_ua
-from lib import config, common, scrapers, store, cleanstring, cache
+from lib import config, common, scrapers, store, cleanstring, cache, auto_select
 
 actions = []
 def _action(func):
@@ -78,6 +79,15 @@ def versions(url):
             action_url = common.action_url('episodes', url=version_url)
             ver = cleanstring.version(label)
             di_list.append(common.diritem(ver, action_url))
+
+            if auto_select.settings_is_set('auto_select_version'):
+                desire_version = auto_select.get_version_string()
+                if desire_version != '' and desire_version in ver.lower():
+                    common.notify(
+                        heading="Auto picked version",
+                        message="Picked {}".format(ver))
+                    return _episodes(versions[0][1])
+
         return di_list
 
 @_dir_action
@@ -170,7 +180,13 @@ def play_mirror(url):
         soup = BeautifulSoup(common.webread(url), 'html5lib')
         iframe = soup.find(id='iframeplayer')
         iframe_url = urljoin(config.base_url, str(iframe.attrs['src']))
-        vidurl = common.resolve(iframe_url)
+        try:
+            vidurl = common.resolve(iframe_url)
+        except ResolverError as e:
+            if str(e) == 'No link selected':
+                return
+            raise  e
+
 
         if vidurl:
             try:
@@ -184,6 +200,10 @@ def play_mirror(url):
                 vidurl = vidurl + '|User-Agent=' + urllib.parse.quote(get_ua())
             xbmc.Player().play(vidurl, li)
 
+        else:
+            common.notify(
+                heading="icDrama",
+                message="Unable to play video")
 @_dir_action
 def mirrors(url):
     return _mirrors(url)
@@ -198,6 +218,13 @@ def _mirrors(url):
                 label = cleanstring.mirror(mirr_label, part_label)
                 action_url = common.action_url('play_mirror', url=part_url)
                 di_list.append(common.diritem(label, action_url, isfolder=False))
+
+        if auto_select.settings_is_set('auto_select_first_mirror'):
+            common.notify(
+                heading="Other mirrors exists",
+                message=", ".join("{} (count: {})".format(mirr_label, len(parts)) for mirr_label, parts in mirrors),
+                time=6000)
+            play_mirror(url)
         return di_list
     else:
         # if no mirror listing, try to resolve this page directly

@@ -6,9 +6,12 @@ import base64
 import requests
 from bs4 import BeautifulSoup
 import resolveurl
-from resolveurl import common
+from resolveurl import common, hmf
 from resolveurl.resolver import ResolveUrl, ResolverError
 from resolveurl.plugins.lib import helpers
+import xbmc
+from lib import common as libcommon
+from lib import auto_select
 
 class Icdrama(ResolveUrl):
     name = 'Icdrama'
@@ -20,6 +23,13 @@ class Icdrama(ResolveUrl):
         self.net = common.Net()
         self.headers = {'User-Agent': common.RAND_UA}
 
+    def _url_can_play_directly(self, url):
+        if any(token in url for token in
+            ['redirector.googlevideo.com',
+             'blogspot.com', 'fbcdn.net']): #for current Videobug source
+            # Kodi can play directly, skip further resolve
+            return True
+        return False
 
     def get_media_url(self, host, media_id):
         url = self.get_url(host, media_id)
@@ -34,23 +44,46 @@ class Icdrama(ResolveUrl):
                 unwrapped_url = response.url
             else:
                 streams = self._extract_streams(response)
-                unwrapped_url = helpers.pick_source(streams, auto_pick=False)
 
-            unwrapped_url = unwrapped_url.decode("utf-8")
-            if ('redirector.googlevideo.com' in unwrapped_url or
-                'blogspot.com' in unwrapped_url or
-                'fbcdn.net' in unwrapped_url): #for current Videobug source
-                # Kodi can play directly, skip further resolve
-                return unwrapped_url
+                if not auto_select.settings_is_set('auto_select_master_switch'):
+                    # manually pick source
+                    unwrapped_url = helpers.pick_source(streams, auto_pick=False).decode("utf-8")
+                    if self._url_can_play_directly(unwrapped_url):
+                        return unwrapped_url
+                    return resolveurl.resolve(unwrapped_url)
+                else:
+                    # automatically pick source
+                    streams.sort(key=auto_select.rank_url_by_resolutionn)
+                    # perform auto-select (in the order of preference) for all streams until empty
+                    while len(streams) > 0:
+                        source = streams.pop(0)
+                        unwrapped_url = source[1].decode("utf-8")
+                        libcommon.notify(
+                            heading="Auto picked source",
+                            message=source[0])
 
-            return resolveurl.resolve(unwrapped_url)
+                        if not self._url_can_play_directly(unwrapped_url):
+                            # further resolve with upstream resolver
+                            try:
+                                unwrapped_url = resolveurl.resolve(unwrapped_url)
+                            except ResolverError as e:
+                                xbmc.log("Resolver error: {}".format(e), level=xbmc.LOGDEBUG)
+                                if str(e) == 'Daily view limit reached':  # upstream resolver reports limit reached
+                                    continue  # try next stream
+                                raise e
+
+                        if not hmf.test_stream(unwrapped_url):  # unplayable (e.g. expired link)
+                            continue  # try next stream
+
+                        return unwrapped_url
         else:
             try:
                 html   = self.net.http_GET(url, headers=self.headers).content
                 iframe = BeautifulSoup(html, 'html5lib').find('iframe')
                 return resolveurl.resolve(iframe['src'])
             except:
-                return None
+                pass
+        return None
 
     def _extract_streams(self, response):
         '''Return list of streams (tuples (url, label))

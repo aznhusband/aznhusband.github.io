@@ -121,3 +121,13 @@ def busy_indicator():
         yield
     finally:
         xbmc.executebuiltin('Dialog.Close(busydialog)')
+
+def notify(heading=None, message=None, icon=xbmcgui.NOTIFICATION_INFO,
+        time=3000, sound=False):
+    xbmcgui.Dialog().notification(
+        heading=heading,
+        message=message,
+        icon=icon,
+        time=time,
+        sound=sound
+        )
