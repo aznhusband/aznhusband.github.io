@@ -1,15 +1,51 @@
 name: Release zip
 
 on:
-  release:
-    types: [published]
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
 
 jobs:
   zip-files:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: papeloto/action-zip@v1
+      - name: Archive Release
+        uses: thedoctor0/zip-release@master
         with:
-          files: src/plugin.video.icdrama/
-          dest: result.zip
+          filename: 'result.zip'
+          path: plugin.video.icdrama
+          directory: src
+          type: zip
+          exclusions: '*.git* __pycache__'
+
+    #############################################
+
+      - name: Set outputs
+        id: vars
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+      - name: Check outputs
+        run: echo ${{ steps.vars.outputs.sha_short }}
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.vars.outputs.sha_short }}
+          release_name: "Zipped plugin (SHA: ${{ steps.vars.outputs.sha_short }})"
+          draft: false
+          prerelease: false
+      - name: Upload Release Asset
+        # id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: src/result.zip
+          asset_name: drama-plugin-for-kodi_SHA-${{ steps.vars.outputs.sha_short }}.zip
+          asset_content_type: application/zip
+
