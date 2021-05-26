@@ -16,5 +16,8 @@
     <disclaimer>This addon is not affiliated with icdrama.se</disclaimer>
     <platform>all</platform>
     <license>MIT License</license>
+    <assets>
+        <icon>icon.png</icon>
+    </assets>
   </extension>
 </addon>
