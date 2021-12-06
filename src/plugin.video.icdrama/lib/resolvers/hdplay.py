@@ -30,7 +30,7 @@ class HdPlay(ResolveUrl):
             return ""
 
         html = response.content        
-        match = re.search(r'var\svideo_url\s=\s"(.+?)";', html)
+        match = re.search(r'var\svideo_url\s?=\s?"(.+?)";', html)
         if match:
             video_url = 'http://' + host + match.group(1)
             return video_url + helpers.append_headers(self.headers)
