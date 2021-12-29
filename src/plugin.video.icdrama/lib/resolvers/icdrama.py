@@ -60,7 +60,8 @@ class Icdrama(ResolveUrl):
                         unwrapped_url = source[1].decode("utf-8")
                         libcommon.notify(
                             heading="Auto picked source",
-                            message=source[0])
+                            message=source[0]
+                            )
 
                         if not self._url_can_play_directly(unwrapped_url):
                             # further resolve with upstream resolver
@@ -81,9 +82,10 @@ class Icdrama(ResolveUrl):
                 html   = self.net.http_GET(url, headers=self.headers).content
                 iframe = BeautifulSoup(html, 'html5lib').find('iframe')
                 return resolveurl.resolve(iframe['src'])
-            except:
-                pass
-        return None
+            except Exception as e:
+                xbmc.log("Resolver error: {}".format(e), level=xbmc.LOGDEBUG)
+                raise ResolverError(str(e))
+        raise ResolverError("Unable to resolve url from icdrama")
 
     def _extract_streams(self, response):
         '''Return list of streams (tuples (url, label))
