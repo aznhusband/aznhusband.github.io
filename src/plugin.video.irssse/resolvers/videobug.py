@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 import urlresolver
 from urlresolver import common
 from urlresolver.resolver import UrlResolver, ResolverError
-from urlresolver.plugins.lib import jsunpack, helpers
+from urlresolver.lib import jsunpack, helpers
 
 class Videobug(UrlResolver):
     name = 'Videobug'
