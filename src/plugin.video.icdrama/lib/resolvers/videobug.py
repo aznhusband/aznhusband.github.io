@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 import resolveurl
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
-from resolveurl.plugins.lib import jsunpack, helpers
+from resolveurl.lib import jsunpack, helpers
 from .. import common as cmn
 
 class Videobug(ResolveUrl):

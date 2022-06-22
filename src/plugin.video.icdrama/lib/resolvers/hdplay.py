@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 import resolveurl
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
 import xbmc
 from .. import common as cmn
 
