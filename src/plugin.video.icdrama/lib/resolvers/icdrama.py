@@ -165,7 +165,8 @@ class Icdrama(ResolveUrl):
     def _get_streams_data(self, url, data):
         # Make the ajax call
         session = requests.Session()
-
+        if not url.startswith("http"):
+            url = "http:" + url
         self.headers['Referer'] = url
         self.headers['X-Requested-With'] = 'XMLHttpRequest'
         self.headers['Accept'] = 'application/json, text/javascript, */*; q=0.01'
