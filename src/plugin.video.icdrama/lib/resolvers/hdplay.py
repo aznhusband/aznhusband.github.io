@@ -14,8 +14,8 @@ from .. import common as cmn
 
 class HdPlay(ResolveUrl):
     name = 'HDplay'
-    domains = [ 'hdplay.se']
-    pattern = '(?://|\.)(hdplay\.se)/(.+)'
+    domains = [ 'hdplay.se', 'drive.adramas.se']
+    pattern = '(?://|\.)(hdplay\.se|drive\.adramas\.se)/(.+)'
 
 
     def __init__(self):
@@ -25,6 +25,7 @@ class HdPlay(ResolveUrl):
 
     def get_media_url(self, host, media_id):
         url = self.get_url(host, media_id)
+        # xbmc.log(str([host, media_id, url]), xbmc.LOGERROR)
         response = requests.get(url, headers=self.headers)
 
         if response.status_code == 200:
