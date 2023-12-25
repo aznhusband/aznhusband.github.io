@@ -50,7 +50,7 @@ def add_item(diritem):
 def end_dir():
     xbmcplugin.endOfDirectory(_handle)
 
-def diritem(label_or_stringid, url, image='', isfolder=True, context_menu=[]):
+def diritem(label_or_stringid, url, image='', isfolder=True, context_menu=[], isplayable=False):
     if type(label_or_stringid) is int:
         label = xbmcaddon.Addon().getLocalizedString(label_or_stringid)
     else:
@@ -58,6 +58,9 @@ def diritem(label_or_stringid, url, image='', isfolder=True, context_menu=[]):
     listitem = xbmcgui.ListItem(label)
     listitem.setArt({'icon': image})
     listitem.addContextMenuItems(context_menu, replaceItems=True)
+    if isplayable:
+        listitem.setProperty('IsPlayable', 'true')
+        xbmcplugin.setContent(_handle, 'episode')
     # this is unpackable for xbmcplugin.addDirectoryItem
     return dict(
         handle   = _handle,
@@ -65,6 +68,9 @@ def diritem(label_or_stringid, url, image='', isfolder=True, context_menu=[]):
         listitem = listitem,
         isFolder = isfolder
     )
+
+def play_video(li):
+    xbmcplugin.setResolvedUrl(_handle, True, li)
 
 def popup(s):
     addon_name = xbmcaddon.Addon().getAddonInfo('name')

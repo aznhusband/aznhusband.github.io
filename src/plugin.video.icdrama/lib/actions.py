@@ -101,7 +101,7 @@ def _episodes(url):
         for name, episode_url in episodes:
             action_url = common.action_url('mirrors', url=episode_url)
             epi = cleanstring.episode(name)
-            di_list.append(common.diritem(epi, action_url))
+            di_list.append(common.diritem(epi, action_url, isfolder=False, isplayable=True))
         return di_list
     else:
         return _mirrors(url)
@@ -198,7 +198,8 @@ def play_mirror(url):
             li.setArt({'thumb': image})
             if 'User-Agent=' not in vidurl:
                 vidurl = vidurl + '|User-Agent=' + urllib.parse.quote(get_ua())
-            xbmc.Player().play(vidurl, li)
+            li.setPath(vidurl)
+            common.play_video(li)
 
         else:
             common.notify(
