@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.icdrama" version="2.3.3" name="Icdrama" provider-name="aznhusband, dumbo0001, s_h, boleanly, mugol, General-Meow, cthlo, soraxas, andya4">
+<addon id="plugin.video.icdrama" version="2.3.4" name="Icdrama" provider-name="aznhusband, dumbo0001, s_h, boleanly, mugol, General-Meow, cthlo, soraxas, andya4">
   <requires>
     <import addon="script.module.html5lib" version="0.999.0"/>
     <import addon="script.module.beautifulsoup4" version="4.3.2"/>
