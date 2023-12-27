@@ -1,6 +1,6 @@
 import re
-import urllib
-from urlparse import urljoin, urlparse
+import urllib.request, urllib.parse, urllib.error
+from urllib.parse import urljoin, urlparse
 from bs4 import BeautifulSoup
 from lib import cache, config, common
 
@@ -92,7 +92,7 @@ def search_page(url):
     # Note: use the url itself to get search text and page
     relpath = urlparse(url).path.lstrip('/')
     m = re.search(r'search/([%1-9A-Za-z_\.-]+)', relpath)
-    text = urllib.unquote(m.group(1)) if m else ''
+    text = urllib.parse.unquote(m.group(1)) if m else ''
     m = re.search(r'page-(\d+)\.html', relpath)
     page = m.group(1) if m else '1'
     return (text, page)

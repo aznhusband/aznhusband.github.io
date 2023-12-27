@@ -7,6 +7,10 @@ msgstr ""
 # Index
 ###################################
 
+msgctxt "#32001"
+msgid "General"
+msgstr "General"
+
 msgctxt "#33000"
 msgid "Recent Updates"
 msgstr "Recent Updates"
@@ -183,3 +187,38 @@ msgstr "Removed from saved list"
 msgctxt "#33304"
 msgid "No search results"
 msgstr "No search results"
+
+# Auto select
+###################################
+
+msgctxt "#33400"
+msgid "Auto selector"
+msgstr "Auto selector"
+
+msgctxt "#33401"
+msgid "Master switch: Controls all auto-select functionality"
+msgstr "Master switch: Controls all auto-select functionality"
+
+msgctxt "#33402"
+msgid "Master switch"
+msgstr "Master switch"
+
+msgctxt "#33403"
+msgid "Auto select source by preference"
+msgstr "Auto select source by preference"
+
+msgctxt "#33404"
+msgid "Source preference (comma separated list)"
+msgstr "Source preference (comma separated list)"
+
+msgctxt "#33405"
+msgid "Auto select first mirror"
+msgstr "Auto select first mirror"
+
+msgctxt "#33406"
+msgid "Auto select version"
+msgstr "Auto select version"
+
+msgctxt "#33407"
+msgid "Version string to match (e.g. cantonese, english)"
+msgstr "Version string to match (e.g. cantonese, english)"

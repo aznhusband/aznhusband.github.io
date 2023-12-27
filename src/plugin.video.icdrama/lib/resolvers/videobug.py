@@ -1,14 +1,14 @@
 import re
 import json
-from urllib import unquote
-from urlparse import urlparse
+from urllib.parse import unquote
+from urllib.parse import urlparse
 import base64
 import requests
 from bs4 import BeautifulSoup
 import resolveurl
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
-from resolveurl.plugins.lib import jsunpack, helpers
+from resolveurl.lib import jsunpack, helpers
 from .. import common as cmn
 
 class Videobug(ResolveUrl):
@@ -35,6 +35,7 @@ class Videobug(ResolveUrl):
             streams = self._extract_streams(response)
             unwrapped_url = helpers.pick_source(streams, auto_pick=False)
 
+        unwrapped_url = unwrapped_url.decode("utf-8")
         if ('redirector.googlevideo.com' in unwrapped_url or
             'blogspot.com' in unwrapped_url or
             'fbcdn.net' in unwrapped_url): #for current Videobug source
@@ -77,7 +78,7 @@ class Videobug(ResolveUrl):
         if response.status_code != 200:
             return streams
 
-        html = response.content
+        html = response.content.decode("utf-8")
         base_url = self._get_base_url(response.url)
         post_url = self._get_post_url(html, base_url)
         data = self._get_post_data(html, base_url)
@@ -174,8 +175,8 @@ class Videobug(ResolveUrl):
         streams = []
         # Grab the HTML
         if response.status_code == 200:
-            html = response.content
-            url  = response.url
+            html = response.content.decode("utf-8")
+            url  = response.url.decode("utf-8")
         else:
             # error, bail.
             return streams
@@ -248,7 +249,7 @@ class Videobug(ResolveUrl):
         ''' Allupload
             http://videobug.se/vid-a/g2S5k34-MoC2293iUaa9Hw
         '''
-        html = response.content
+        html = response.content.decode("utf-8")
         streams = []
         df = re.search(r"dF\(\\?'(.*)\\?'\)", html)
         if df:
@@ -278,7 +279,7 @@ class Videobug(ResolveUrl):
         ''' Picasaweb, Videobug
             http://videobug.se/video/Wz3_oCoEYozRSbJFQo4fkjmuvR6LpsFHM-XZy...
         '''
-        html = response.content
+        html = response.content.decode("utf-8")
         streams = []
         soup = BeautifulSoup(html, 'html5lib')
         player_func = re.compile(r'(player_[^\(]+)\(\);').match
@@ -290,7 +291,7 @@ class Videobug(ResolveUrl):
             re_flash = re.compile(r"video *= *{[^:]+: *'(.*?)' *}")
             re_html5 = re.compile(r'<source.*?src=\"(.*?)\"')
             urls = [(re_flash.findall(fb) or re_html5.findall(fb))[0] for fb in func_bodies]
-            streams = zip(labels, urls)
+            streams = list(zip(labels, urls))
         except Exception:
             pass
         return streams
@@ -299,7 +300,7 @@ class Videobug(ResolveUrl):
     def __method4(self, response):
         ''' http://videobug.se/vid-al/XNkjCT5pBx1YlndruYWdWg?&caption=-sgCv7...
         '''
-        html = response.content
+        html = response.content.decode("utf-8")
         streams = []
         vids = re.findall(r'''{ *file *: *strdecode\('(.+?)'\).*?label *: *"(.*?)"''', html)
         for cryptic_url, label in vids:
@@ -311,7 +312,7 @@ class Videobug(ResolveUrl):
     def __method5(self, response):
         ''' http://videobug.se/vid/pVobcNozEWmTkarNnwX06w
         '''
-        html = response.content
+        html = response.content.decode("utf-8")
         streams = []
         if jsunpack.detect(html):
             streams = self._extract_streams(jsunpack.unpack(html))

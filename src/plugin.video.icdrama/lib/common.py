@@ -1,21 +1,25 @@
 import sys
 import xbmc
+import xbmcvfs
 import xbmcgui
 import xbmcplugin
 import xbmcaddon
 from contextlib import contextmanager
 from os.path import abspath, dirname
-from urllib import urlencode, quote
+from urllib.parse import urlencode, quote
 from resolveurl.hmf import HostedMediaFile
 import resolveurl
 from resolveurl.lib.net import Net, get_ua
-#import requests
 
 _plugin_url = sys.argv[0]
 _handle = int(sys.argv[1])
 _dialog = xbmcgui.Dialog()
 
-profile_dir = xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('profile'))
+if hasattr(xbmcvfs, 'translatePath'):
+    profile_dir = xbmcvfs.translatePath(xbmcaddon.Addon().getAddonInfo('profile'))
+else:
+    profile_dir = xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('profile'))
+
 
 def debug(s):
     xbmc.log(str(s), xbmc.LOGDEBUG)
@@ -24,7 +28,7 @@ def error(s):
     xbmc.log(str(s), xbmc.LOGERROR)
 
 def webread(url):
-    if type(url) is unicode:
+    if type(url) is str:
         url = url.encode('utf8')
     url = quote(url, ':/')
 
@@ -34,8 +38,8 @@ def webread(url):
 
 def action_url(action, **action_args):
     action_args['action'] = action
-    for k, v in action_args.items():
-        if type(v) is unicode:
+    for k, v in list(action_args.items()):
+        if type(v) is str:
             action_args[k] = v.encode('utf8')
     qs = urlencode(action_args)
     return _plugin_url + '?' + qs
@@ -46,13 +50,17 @@ def add_item(diritem):
 def end_dir():
     xbmcplugin.endOfDirectory(_handle)
 
-def diritem(label_or_stringid, url, image='', isfolder=True, context_menu=[]):
+def diritem(label_or_stringid, url, image='', isfolder=True, context_menu=[], isplayable=False):
     if type(label_or_stringid) is int:
         label = xbmcaddon.Addon().getLocalizedString(label_or_stringid)
     else:
         label = label_or_stringid
-    listitem = xbmcgui.ListItem(label, iconImage=image)
+    listitem = xbmcgui.ListItem(label)
+    listitem.setArt({'icon': image})
     listitem.addContextMenuItems(context_menu, replaceItems=True)
+    if isplayable:
+        listitem.setProperty('IsPlayable', 'true')
+        xbmcplugin.setContent(_handle, 'episode')
     # this is unpackable for xbmcplugin.addDirectoryItem
     return dict(
         handle   = _handle,
@@ -60,6 +68,9 @@ def diritem(label_or_stringid, url, image='', isfolder=True, context_menu=[]):
         listitem = listitem,
         isFolder = isfolder
     )
+
+def play_video(li):
+    xbmcplugin.setResolvedUrl(_handle, True, li)
 
 def popup(s):
     addon_name = xbmcaddon.Addon().getAddonInfo('name')
@@ -73,7 +84,7 @@ def select(heading, options):
     return _dialog.select(heading, options)
 
 def resolve(url):
-    if type(url) is unicode:
+    if type(url) is str:
         url = url.encode('utf8')
     url = quote(url, ':/')
 
@@ -116,3 +127,13 @@ def busy_indicator():
         yield
     finally:
         xbmc.executebuiltin('Dialog.Close(busydialog)')
+
+def notify(heading=None, message=None, icon=xbmcgui.NOTIFICATION_INFO,
+        time=3000, sound=False):
+    xbmcgui.Dialog().notification(
+        heading=heading,
+        message=message,
+        icon=icon,
+        time=time,
+        sound=sound
+        )

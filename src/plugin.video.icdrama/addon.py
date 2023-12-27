@@ -1,7 +1,14 @@
+from __future__ import absolute_import, division, unicode_literals
+from future import standard_library
+from future.builtins import *
+standard_library.install_aliases()
+
 import sys
-from urlparse import parse_qsl
-from urllib import unquote
+from urllib.parse import parse_qsl
+from urllib.parse import unquote
 from lib import actions
+
+
 
 if __name__ == '__main__':
     qs = sys.argv[2]

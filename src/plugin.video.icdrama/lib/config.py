@@ -1,9 +1,9 @@
 import os.path
-from urlparse import urljoin
+from urllib.parse import urljoin
 from lib.common import diritem, action_url, profile_dir
 
 base_url = 'http://icdrama.to'
-domains = ['hkdrama.to', 'adrama.to', 'icdrama.to', 'icdrama.se']
+domains = ['hkdrama.to', 'adrama.to', 'icdrama.to', 'icdrama.se', 'adramas.se']
 cache_file = os.path.join(profile_dir, 'cache.pickle')
 store_file = os.path.join(profile_dir, 'store.pickle')
 

@@ -1,20 +1,21 @@
 import re
 import json
-from urllib import unquote
-from urlparse import urlparse
+from urllib.parse import unquote
+from urllib.parse import urlparse
 import base64
 import requests
 from bs4 import BeautifulSoup
 import resolveurl
 from resolveurl import common
 from resolveurl.resolver import ResolveUrl, ResolverError
-from resolveurl.plugins.lib import helpers
+from resolveurl.lib import helpers
+import xbmc
 from .. import common as cmn
 
 class HdPlay(ResolveUrl):
     name = 'HDplay'
-    domains = [ 'hdplay.se']
-    pattern = '(?://|\.)(hdplay\.se)/(.+)'
+    domains = [ 'hdplay.se', 'drive.adramas.se']
+    pattern = '(?://|\.)(hdplay\.se|drive\.adramas\.se)/(.+)'
 
 
     def __init__(self):
@@ -22,20 +23,22 @@ class HdPlay(ResolveUrl):
         self.headers = {'User-Agent': common.RAND_UA}
 
 
-    def get_media_url(self, host, media_id):        
+    def get_media_url(self, host, media_id):
         url = self.get_url(host, media_id)
+        # xbmc.log(str([host, media_id, url]), xbmc.LOGERROR)
         response = requests.get(url, headers=self.headers)
 
-        if response.status_code != 200:
-            return ""
+        if response.status_code == 200:
+            html = response.content.decode("utf-8")
+            # capture everything, regardless of single or double quotes
+            match = re.search(r'var\s+video_url\s*=\s*"([^\\"]+)"', html)
+            if match:
+                video_url = 'http://' + host + match.group(1)
+                return video_url + helpers.append_headers(self.headers)
+            xbmc.log(f"html: {html}", xbmc.LOGERROR)
 
-        html = response.content        
-        match = re.search(r'var\svideo_url\s=\s"(.+?)";', html)
-        if match:
-            video_url = 'http://' + host + match.group(1)
-            return video_url + helpers.append_headers(self.headers)
 
-        return ""
+        raise ResolverError(f"Unable to resolve url in hdplay: {response}")
 
     def get_url(self, host, media_id):
         return self._default_get_url(host, media_id, 'http://{host}/{media_id}')

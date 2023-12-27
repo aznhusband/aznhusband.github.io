@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <settings>
-  <setting id="title_language" type="select" label="33200" lvalues="33201|33202|33203" default="0"/>
+  <category label="32001">
+    <setting id="title_language" type="select" label="33200" lvalues="33201|33202|33203" default="0"/>
+  </category>
+  <category label="33400">
+    <setting label="33401" type="lsep"/>
+      <setting id="auto_select_master_switch" type="bool" label="33402" default="false"/>
+    <setting type="sep"/>
+    <setting id="auto_select_source" type="bool" label="33403" default="false"/>
+    <setting id="auto_select_source_preference" type="text" label="33404" default="1080p,720p,360p" subsetting="true"/>
+    <setting id="auto_select_first_mirror" type="bool" label="33405" default="false"/>
+
+    <!-- <setting label="33404" type="lsep"/> -->
+      <setting id="auto_select_version" type="bool" label="33406" default="false"/>
+      <setting id="auto_select_version_string" type="text" label="33407" default="cantonese" subsetting="true"/>
+  </category>
 </settings>
